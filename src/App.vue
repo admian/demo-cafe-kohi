@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import coffee1 from './assets/coffee.webp'
+import coffee2 from './assets/coffee2.jfif'
+import coffee3 from './assets/coffee3.webp'
+
+const galleryImages = [coffee1, coffee2, coffee3]
+const currentSlide = ref(0)
+let slideTimer: number | undefined
 
 const menuItems = [
   { name: 'Espresso', price: '$3.50', desc: 'Single origin, double shot' },
@@ -56,6 +63,29 @@ function handleReservationSubmit() {
   reserveName.value = ''
   reserveEmail.value = ''
 }
+
+function nextSlide() {
+  currentSlide.value = (currentSlide.value + 1) % galleryImages.length
+}
+
+function prevSlide() {
+  currentSlide.value = (currentSlide.value - 1 + galleryImages.length) % galleryImages.length
+}
+
+function goToSlide(index: number) {
+  currentSlide.value = index
+  restartAutoplay()
+}
+
+function restartAutoplay() {
+  if (slideTimer) window.clearInterval(slideTimer)
+  slideTimer = window.setInterval(nextSlide, 4000)
+}
+
+onMounted(restartAutoplay)
+onUnmounted(() => {
+  if (slideTimer) window.clearInterval(slideTimer)
+})
 </script>
 
 <template>
@@ -171,9 +201,41 @@ function handleReservationSubmit() {
     <!-- About -->
     <section id="about" class="scroll-mt-24 px-6 py-20">
       <div class="mx-auto grid max-w-5xl items-center gap-12 md:grid-cols-2">
-        <div class="aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-[#e8ddd0] to-[#c4956a]/40">
-          <div class="flex h-full items-center justify-center font-serif text-6xl text-[#3d2e24]/20">
-            珈琲
+        <div class="group relative aspect-square overflow-hidden rounded-3xl shadow-lg">
+          <img
+            v-for="(img, i) in galleryImages"
+            :key="i"
+            :src="img"
+            :alt="`Kōhī House cafe photo ${i + 1}`"
+            class="absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-in-out"
+            :class="i === currentSlide ? 'opacity-100' : 'opacity-0'"
+          />
+          <button
+            type="button"
+            aria-label="Previous photo"
+            class="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-[#3d2e24] opacity-0 shadow transition hover:bg-white group-hover:opacity-100"
+            @click="prevSlide(); restartAutoplay()"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            aria-label="Next photo"
+            class="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-[#3d2e24] opacity-0 shadow transition hover:bg-white group-hover:opacity-100"
+            @click="nextSlide(); restartAutoplay()"
+          >
+            ›
+          </button>
+          <div class="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+            <button
+              v-for="(_, i) in galleryImages"
+              :key="i"
+              type="button"
+              :aria-label="`Go to photo ${i + 1}`"
+              class="h-2 rounded-full transition-all"
+              :class="i === currentSlide ? 'w-6 bg-white' : 'w-2 bg-white/50'"
+              @click="goToSlide(i)"
+            />
           </div>
         </div>
         <div>

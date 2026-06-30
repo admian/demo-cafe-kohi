@@ -8,13 +8,12 @@ A warm, elegant cafe landing page demo built with **Vue 3**, **TypeScript**, **V
 
 ## Live Demo
 
-> Deploy to Vercel and paste your URL here:
-> `https://your-demo.vercel.app`
+https://demo-cafe-kohi.vercel.app
 
 ## Features
 
 - Responsive design with serif + sans typography
-- Hero, menu grid, about section, visit & reservation form
+- Hero, menu grid, about section with image carousel, visit & reservation form
 - Warm earthy color palette
 - Smooth scroll navigation
 - Interactive buttons with toast feedback
