@@ -17,6 +17,7 @@ A warm, elegant cafe landing page demo built with **Vue 3**, **TypeScript**, **V
 - Hero, menu grid, about section, visit & reservation form
 - Warm earthy color palette
 - Smooth scroll navigation
+- Interactive buttons with toast feedback
 
 ## Tech Stack
 
